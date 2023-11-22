@@ -11,6 +11,7 @@ from models.review import Review
 import cmd
 import sys
 
+
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
@@ -39,15 +40,14 @@ class HBNBCommand(cmd.Cmd):
         Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
         (Brackets denote optional fields in usage example.)
         """
-        _cmd = _cls = _id = _args = ''  
+        _cmd = _cls = _id = _args = ''
 
         if not ('.' in line and '(' in line and ')' in line):
             return line
 
-        try:  
-            pline = line[:]  
+        try:
+            pline = line[:]
 
-            
             _cls = pline[:pline.find('.')]
 
             _cmd = pline[pline.find('.') + 1:pline.find('(')]
@@ -84,14 +84,10 @@ class HBNBCommand(cmd.Cmd):
         """ Method to exit the HBNB console"""
         exit()
 
-
-
     def do_EOF(self, arg):
         """ Handles EOF to exit program """
         print()
         exit()
-
-
 
     def emptyline(self):
         """ Overrides the emptyline method of CMD """
@@ -119,8 +115,6 @@ class HBNBCommand(cmd.Cmd):
         new_instance.save()
         print(new_instance.id)
 
-
-
     def do_show(self, args):
         """ Method to show an individual object """
         new = args.partition(" ")
@@ -147,8 +141,6 @@ class HBNBCommand(cmd.Cmd):
             print(storage._FileStorage__objects[key])
         except KeyError:
             print("** no instance found **")
-
-
 
     def do_destroy(self, args):
         """ Destroys a specified object """
@@ -178,8 +170,6 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
 
-
-
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
@@ -196,8 +186,6 @@ class HBNBCommand(cmd.Cmd):
                 print_list.append(str(v))
         print(print_list)
 
-
-
     def do_count(self, args):
         """Count current number of class instances"""
         count = 0
@@ -205,8 +193,6 @@ class HBNBCommand(cmd.Cmd):
             if args == k.split('.')[0]:
                 count += 1
         print(count)
-
-
 
     def do_update(self, args):
         """ Updates a certain object with new info """
