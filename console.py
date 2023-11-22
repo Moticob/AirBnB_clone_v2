@@ -78,7 +78,6 @@ class HBNBCommand(cmd.Cmd):
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
-                        # _args = _args.replace('\"', '')
             line = ' '.join([_cmd, _cls, _id, _args])
 
         except Exception as mess:
@@ -114,23 +113,51 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class"""
-        try:
-            if not args:
-                raise SyntaxError()
-            arg_list = args.split(" ")
-            kw = {}
-            for arg in arg_list[1:]:
-                arg_splited = arg.split("=")
-                arg_splited[1] = eval(arg_splited[1])
-                if type(arg_splited[1]) is str:
-                    arg_splited[1] = arg_splited[1].replace("_", " ").replace('"', '\\"')
-                kw[arg_splited[0]] = arg_splited[1]
-        except SyntaxError:
+        """Create"""
+        cls = args.partition(' ')[0]
+        args = args.partition(' ')[2].split()  # args is now a list
+
+        if not cls:
             print("** class name missing **")
-        except NameError:
+            return
+
+        elif cls not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        new_instance = HBNBCommand.classes[arg_list[0]](**kw)
+            return
+        new_instance = HBNBCommand.classes[cls]()
+
+        if args:
+            for arg in args:
+                if '=' in arg:
+                    key, value = arg.split('=')
+                    # might be redundant but i'm leaving this
+                    # to test it out later
+                    if ' ' in value:
+                        continue
+
+                    # skip if value contains space
+                    value = value.replace('_', ' ')
+
+                    # format params
+                    if value.startswith('"') and value.endswith('"'):
+                        # format as string
+                        value = value.strip('"')
+                        value = value.replace('\\"', '%22')
+                        if '"' in value:
+                            continue
+                        value = value.replace('%22', '"')
+                        value = str(value)
+                    elif '.' in value:
+                        # format as float
+                        value = float(value)
+                    else:
+                        # format as integer => default case
+                        try:
+                            value = int(value)
+                        except ValueError:
+                            continue
+                    new_instance.__dict__.update({key: value})
+
         new_instance.save()
         print(new_instance.id)
 
@@ -325,6 +352,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
