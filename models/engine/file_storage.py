@@ -52,7 +52,6 @@ class FileStorage:
         with open(self.__file_path, 'w', encoding="UTF-8") as f:
             json.dump(my_dict, f)
 
-
     def reload(self):
         """serialize the file path to JSON file path
         """
@@ -63,7 +62,6 @@ class FileStorage:
                     self.__objects[key] = value
         except FileNotFoundError:
             pass
-
 
     def delete(self, obj=None):
         """ delete an existing element
