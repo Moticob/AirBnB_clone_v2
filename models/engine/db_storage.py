@@ -35,8 +35,7 @@ class DBStorage:
 
     def all(self, cls=None):
         """returns a dictionary
-        Return:
-            returns a dictionary of __object
+        Return:dictionary of __object
         """
         dic = {}
         if cls:
@@ -59,14 +58,14 @@ class DBStorage:
         """add the object to the current database session"""
         self.__session.add(obj)
 
-    def save(self):
-        """commit all changes of the current database session"""
-        self.__session.commit()
-
     def delete(self, obj=None):
         """delete from the current database session obj if not None"""
         if obj is not None:
             self.__session.delete(obj)
+
+    def save(self):
+        """commits all changes of the current database session"""
+        self.__session.commit()
 
     def reload(self):
         """Create current database session from the engine
