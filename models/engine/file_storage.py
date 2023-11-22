@@ -9,6 +9,9 @@ from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
 
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
+
 
 class FileStorage:
     """Represent an abstracted storage engine.
@@ -20,9 +23,15 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-    def all(self):
-        """Return the dictionary __objects."""
-        return FileStorage.__objects
+    def all(self, cls=None):
+        """returns the dictionary __objects"""
+        if cls is not None:
+            new_dict = {}
+            for key, value in self.__objects.items():
+                if cls == value.__class__ or cls == value.__class__.__name__:
+                    new_dict[key] = value
+            return new_dict
+        return self.__objects
 
     def new(self, obj):
         """Set in __objects obj with key <obj_class_name>.id"""
