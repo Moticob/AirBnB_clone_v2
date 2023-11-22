@@ -46,9 +46,6 @@ class FileStorage:
         with open(FileStorage.__file_path, "w") as f:
             json.dump(objdict, f)
 
-    def all(self):
-        """Returns a dictionary of all objects in storage."""
-        return self.__objects
 
     def reload(self):
         """Deserialize the JSON file __file_path to __objects, if it exists."""
