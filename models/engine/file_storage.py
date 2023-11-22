@@ -52,9 +52,20 @@ class FileStorage:
         try:
             with open(FileStorage.__file_path) as f:
                 objdict = json.load(f)
-                for o in objdict.values():
-                    cls_name = o["__class__"]
-                    del o["__class__"]
-                    self.new(eval(cls_name)(**o))
+                for value in objdict.values():
+                    cls_name = value["__class__"]
+                    del value["__class__"]
+                    self.new(eval(cls_name)(**value))
         except FileNotFoundError:
-            return
+            pass
+
+    def delete(self, obj=None):
+        """delete obj from __objects if it’s inside"""
+        if obj is not None:
+            key = obj.__class__.__name__ + '.' + obj.id
+            if key in self.__objects:
+                del self.__objects[key]
+
+    def close(self):
+        """call reload() method for deserializing the JSON file to objects"""
+        self.reload()
